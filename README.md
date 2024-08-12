@@ -92,6 +92,7 @@ public class MdcTaskDecorator implements TaskDecorator {
 
 #### Configuration Class
 
+```java
 @Configuration
 @RequiredArgsConstructor
 class LoggingConfiguration implements WebMvcConfigurer {
@@ -103,3 +104,4 @@ class LoggingConfiguration implements WebMvcConfigurer {
         registry.addInterceptor(traceIdInterceptor);
     }
 }
+```
