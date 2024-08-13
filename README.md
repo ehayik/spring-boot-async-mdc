@@ -67,7 +67,23 @@ class UserService {
 }
 ```
 
-#### Task Decorator Class
+#### Configuration Class
+
+```java
+@Configuration
+@RequiredArgsConstructor
+class LoggingConfiguration implements WebMvcConfigurer {
+
+    private final TraceIdInterceptor traceIdInterceptor;
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(traceIdInterceptor);
+    }
+}
+```
+
+#### Setting the Task Decorator
 
 ```java
 @Component
@@ -90,18 +106,22 @@ public class MdcTaskDecorator implements TaskDecorator {
 }
 ```
 
-#### Configuration Class
+#### Setting the Task Decorator overriding the default Executor bean
+
+Overriding the default Executor bean in a Spring application can be a good idea in several situations, 
+particularly when you need to customize the execution of asynchronous tasks.
 
 ```java
+@EnableAsync
 @Configuration
-@RequiredArgsConstructor
-class LoggingConfiguration implements WebMvcConfigurer {
+class AsyncConfig {
 
-    private final TraceIdInterceptor traceIdInterceptor;
-
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(traceIdInterceptor);
+    @Bean
+    Executor getAsyncExecutor(MdcTaskDecorator mdcTaskDecorator) {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setTaskDecorator(mdcTaskDecorator);
+        executor.initialize();
+        return executor;
     }
 }
 ```
