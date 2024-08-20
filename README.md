@@ -58,7 +58,7 @@ cd spring-boot-async-mdc
 class UserService {
 
     @Async
-    CompletableFuture<User> createAsync(User newUser) {
+    public CompletableFuture<User> createAsync(User newUser) {
         log.info("Simulating a slow, time-consuming process to create user {}.", newUser.username());
         try {
             Thread.sleep(2000);
