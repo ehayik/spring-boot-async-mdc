@@ -121,9 +121,9 @@ particularly when you need to customize the execution of asynchronous tasks.
 class AsyncConfig {
 
     @Bean
-    Executor getAsyncExecutor(MdcTaskDecorator mdcTaskDecorator) {
-        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
-        executor.setTaskDecorator(mdcTaskDecorator);
+    Executor getAsyncExecutor() {
+        var executor = new ThreadPoolTaskExecutor();
+        executor.setTaskDecorator(new MdcTaskDecorator());
         executor.initialize();
         return executor;
     }
